@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.ConnectivityManager.NetworkCallback
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.util.Log
 import androidx.core.content.getSystemService
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -25,6 +26,7 @@ class AndroidConnectivityObserver(
                     networkCapabilities: NetworkCapabilities
                 ) {
                     super.onCapabilitiesChanged(network, networkCapabilities)
+                    Log.d("TAG", ">>> onCapabilitiesChanged: ")
                     val connected = networkCapabilities.hasCapability(
                         NetworkCapabilities.NET_CAPABILITY_VALIDATED
                     )
@@ -33,16 +35,19 @@ class AndroidConnectivityObserver(
 
                 override fun onUnavailable() {
                     super.onUnavailable()
+                    Log.d("TAG", ">>> onUnavailable: ")
                     trySend(false)
                 }
 
                 override fun onLost(network: Network) {
                     super.onLost(network)
+                    Log.d("TAG", "onLost: ")
                     trySend(false)
                 }
 
                 override fun onAvailable(network: Network) {
                     super.onAvailable(network)
+                    Log.d("TAG", "onAvailable: ")
                     trySend(true)
                 }
             }
